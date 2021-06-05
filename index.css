@@ -26,3 +26,9 @@ body {
 #closeBtn:active {
     background-color: blue;
 }
+
+#createFileBtn {
+    background-color: green;
+    width: 50px;
+    height: 20px;
+}
