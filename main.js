@@ -18,7 +18,8 @@ function createWindow() {
     const windowOptions = {
         width: 800,
         height: 600,
-        minwidth: null,
+        minWidth: 650,
+        minHeight: 600,
         frame: true,
         title: app.getName(),
         webPreferences: {

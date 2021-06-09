@@ -8,20 +8,92 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <div id="draggable"><div id="closeBtn"></div></div>
-    <h1>Hello World</h1>
+    <div id="navbar"><div id="closeBtn"></div></div>
+    <h1>Quest Filtering</h1>
+    <small>Proof of Concept</small><br><br>
+    <!-- <h1>Hello World</h1>
     We are using Node.js <span id="node-version"></span>,
     Chromium <span id="chrome-version"></span>,
     and Electron <span id="electron-version"></span>
 
     <br>
+    <br> -->
 
     <button class="btn" id="createFileBtn">Save test file</button>
     <button class="btn" id="readFileBtn">Read json file</button>
     <br>
     <br>
     <div id="dataStatus">No data selected.</div>
-    <button class="btn" id="populateFileData">Populate data from selected file</button>
+    <div id="dataControls">
+        <button class="btn" id="loadAllDataBtn">Load all data from selected file</button>
+        <br>
+        <br>
+        <form id="filterControls">
+            <div>
+                <label for="quest-name-filter">Quest Name:</label>
+                <input type="text" id="quest-name-filter" disabled>
+            </div>
+
+            <div>
+                <label for="importance-level-filter">Importance Level:</label>
+                <select name="importance-level-filter" id="importance-level-filter">
+                    <option value="side-quest">Side Quest</option>
+                    <option value="minor-quest">Minor Quest</option>
+                    <option value="major-quest">Major Quest</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="questline-name-filter">Questline Name Filter:</label>
+                <input type="text" id="questline-name-filter" disabled>
+            </div>
+
+            <div>
+                <label for="questline-index-filter">Questline Index Filter:</label>
+                <input type="number" id="questline-index-filter" disabled>
+            </div>
+
+            <div>
+                <label for="main-location-filter">Main Location Filter:</label>
+                <input type="text" id="main-location-filter" disabled>
+            </div>
+
+            <div>
+                <label for="relevant-locations-filter">Relevant Locations Filter:</label>
+                <input type="text" id="relevant-locations-filter" disabled>
+            </div>
+
+            <div>
+                <label for="relevant-people-filter">Relevant People Filter:</label>
+                <input type="text" id="relevant-people-filter" disabled>
+            </div>
+
+            <div>
+                <label for="relevant-factions-filter">Relevant Factions Filter:</label>
+                <input type="text" id="relevant-factions-filter" disabled>
+            </div>
+
+            <div>
+                <label for="start-date-filter">Start Date Filter:</label>
+                <input type="text" id="start-date-filter" disabled>
+            </div>
+
+            <div>
+                <label for="level-at-assignment-filter">Level at Assignment Filter:</label>
+                <input type="number" id="level-at-assignment-filter" disabled>
+            </div>
+
+            <div>
+                <label for="completed-filter">Completed Filter:</label>
+                <select name="completed-filter" id="completed-filter">
+                    <option value=true>Completed</option>
+                    <option value=false>Uncompleted</option>
+                </select>
+            </div>
+        </form>
+        <button class="btn" id="filterSubmitBtn">Filter results</button>
+    </div>
+    <div class="lineBreak"></div>
     <div id="fileData"></div>
 
     <script src="index.js"></script>
