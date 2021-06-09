@@ -23,12 +23,24 @@ body {
     -webkit-app-region: no-drag;
 }
 
+#closeBtn:hover {
+    background-color: lightcoral;
+}
+
 #closeBtn:active {
     background-color: blue;
 }
 
-#createFileBtn {
+.btn {
     background-color: green;
-    width: 50px;
-    height: 20px;
+}
+
+#populateFileData {
+    visibility: hidden;
+}
+
+.questCard {
+    background-color: tan;
+    margin: 4px;
+    border-radius: 2px;
 }

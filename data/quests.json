@@ -1,0 +1,62 @@
+[
+    {
+        "quest-name": "Quest 1",
+        "importance-level": null,
+        "questline-name": null,
+        "questline-index": null,
+        "summary": null,
+        "full-description": null,
+        "main-location": null,
+        "relevant-locations": [],
+        "relevant-people": [],
+        "relevant-factions": [],
+        "start-date": null,
+        "level-at-assignment": null,
+        "completed": null
+    },
+    {
+        "quest-name": "Quest 2",
+        "importance-level": "side-quest",
+        "questline-name": null,
+        "questline-index": null,
+        "summary": null,
+        "full-description": null,
+        "main-location": null,
+        "relevant-locations": [],
+        "relevant-people": [],
+        "relevant-factions": [],
+        "start-date": null,
+        "level-at-assignment": null,
+        "completed": null
+    },
+    {
+        "quest-name": "Quest 3",
+        "importance-level": "minor-quest",
+        "questline-name": null,
+        "questline-index": null,
+        "summary": null,
+        "full-description": null,
+        "main-location": null,
+        "relevant-locations": [],
+        "relevant-people": [],
+        "relevant-factions": [],
+        "start-date": null,
+        "level-at-assignment": null,
+        "completed": null
+    },
+    {
+        "quest-name": "Quest 4",
+        "importance-level": "major-quest",
+        "questline-name": null,
+        "questline-index": null,
+        "summary": null,
+        "full-description": null,
+        "main-location": null,
+        "relevant-locations": [],
+        "relevant-people": [],
+        "relevant-factions": [],
+        "start-date": null,
+        "level-at-assignment": null,
+        "completed": null
+    }
+]

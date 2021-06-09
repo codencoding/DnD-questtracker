@@ -57,6 +57,10 @@ app.on('window-all-closed', function() {
     if (process.platform !== 'darwin') app.quit()
 })
 
+///////////////////////////////////////
+// Context bridging
+///////////////////////////////////////
+
 /*
 'save-dialog' is received here in the main process from the
  renderer process whenever it runs
@@ -87,12 +91,25 @@ ipcMain.on('save-dialog', (event) => {
         returned from the below line of code, namely the
         data held in `filename`.
         */
-
-        event.sender.send('saved-file', filename.filePath)
+        if (!filename.canceled) {
+            event.sender.send('saved-file', filename.filePath)
+        }
     })
 // console.log("Promise made")
 })
 
 ipcMain.on('close-window', (event) => {
     app.quit()
+})
+
+ipcMain.on('open-dialog', (event) => {
+    const options = {
+        title: "Open a file"
+    }
+
+    dialog.showOpenDialog(options).then((filename) => {
+        if (!filename.canceled) {
+            event.sender.send("file-selected", filename.filePaths[0])
+        }
+    })
 })

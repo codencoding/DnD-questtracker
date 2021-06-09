@@ -12,7 +12,12 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 })
 
-const validChannels = ['save-dialog', 'close-window', 'saved-file']
+
+///////////////////////////////////////
+// Context bridging
+///////////////////////////////////////
+
+const validChannels = ['save-dialog', 'close-window', 'saved-file', 'open-dialog', 'file-selected']
 contextBridge.exposeInMainWorld('ipc', {
     send: (channel, data) => {
         if (validChannels.includes(channel)) {
@@ -37,18 +42,22 @@ contextBridge.exposeInMainWorld('ipc', {
 
 contextBridge.exposeInMainWorld('fs', {
     writeFile: (path, content) => {
-        console.log(path)
-        // TODO: This strict equality (===) doesn't seem to be catching. Worth looking into more.
-        if (path === undefined) {
-            // User opened save dialog, but then closed it without opting to save.
-            console.log("User opened save dialog, but then closed it without opting to save.")
-            return
-        }
-
         fs.writeFile(path, content, (err) => {
             if(err) {
-                console.error("File could not be created")
+                console.error(`File could not be created at: ${path}`)
             }
         })
+    },
+    readFile: (path, encoding, callback) => {
+        fs.readFile(path, encoding, (err, data) => {
+            if (err) {
+                console.log(`Error reading file from disk: ${err}`);
+            } else {
+                callback(data)
+                // // parse JSON string to JSON object
+                // const jsonData = JSON.parse(data)
+                // callback(jsonData)
+            }
+        });
     }
 })
