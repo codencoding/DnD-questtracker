@@ -13,9 +13,6 @@ Does string contain x? (cont)
 
     full-description
     summary
-
-Equality or contains (eq-cont)
-
     main-location
     quest-name
     questline-name
@@ -26,26 +23,25 @@ Does list contain x, y, z...? (lst-cont)
     relevant-locations
     relevant-people
 
-Date range (date-range)
+Date range (date)
 
     start-date
 */
 
+const dateFilts = {
+    'start-date': (valueCollection, compareValue) => {
+        return dateFilt(valueCollection, compareValue, "ge")
+    },
+    'end-date': (valueCollection, compareValue) => {
+        return dateFilt(valueCollection, compareValue, "le")
+    },
+}
 
 const filterFuncs = {
-    'completed': equalityFilt,
-    'full-description': containsFilt,
-    'importance-level': equalityFilt,
-    'level-at-assignment': equalityFilt,
-    'main-location': eqOrContFilt,
-    'quest-name': eqOrContFilt,
-    'questline-index': equalityFilt,
-    'questline-name': eqOrContFilt,
-    'relevant-factions': lstContFilt,
-    'relevant-locations': lstContFilt,
-    'relevant-people': lstContFilt,
-    'start-date': dateRangeFilt,
-    'summary': containsFilt
+    'eq': equalityFilt,
+    'cont': containsFilt,
+    'lst-cont': lstContFilt,
+    'date': dateFilts
 }
 
 
@@ -70,7 +66,6 @@ function trimExcessQuery(queryObj) {
                     }
                 }
             }
-
         }
     }
 
@@ -83,14 +78,14 @@ function updateVals(storeObj, newKey) {
     // values corresponding to the newKey key.
     for (const rowKey in storeObj) {
         if (Object.hasOwnProperty.call(storeObj, rowKey)) {
-            storeObj[rowKey] = window.store.getKeyVals(newKey + '.' + rowKey)
+            storeObj[rowKey] = window.store.getColVals(newKey + '.' + rowKey)
         }
     }
 
     return storeObj
 }
 
-function evalAllFilterTypes(queryKeys, validQuests) {
+function evalAllFilterTypes(queryKeys, validQuests, filterType) {
     for (const queryKey in queryKeys) {
         if (Object.hasOwnProperty.call(queryKeys, queryKey)) {
             const queryVal = queryKeys[queryKey];
@@ -102,39 +97,56 @@ function evalAllFilterTypes(queryKeys, validQuests) {
             } else {
                 // If validQuests hasn't yet been intialized, initialize it to all stored
                 // values in the queryKey column
-                validQuests = window.store.getKeyVals(queryKey)
+                validQuests = window.store.getColVals(queryKey)
             }
-            // Filter values based on corresponding filter function and desired filter value
-            validQuests = filterFuncs[queryKey](validQuests, queryVal)                
+
+            if (filterType == "date") {
+                // If filter is a date-type filter, use the date sub-filters
+                validQuests = evalCollection(validQuests, queryVal, filterFuncs["date"][queryKey])
+            } else {
+                // Filter values based on corresponding filter function and desired filter value
+                validQuests = evalCollection(validQuests, queryVal, filterFuncs[queryKey])
+            }
+
         }
     }
 
     return validQuests
 }
 
-async function executeFilters(filterQuery) {
+function executeFilters(filterQuery) {
+    filterQuery = trimExcessQuery(filterQuery)
+
+    // If there are no filters left after trimming empty filters, return every row index as valid
+    if (!Object.entries(filterQuery).length) {
+        // TODO: Should redo this to return a more arbitrary "Everything is valid" object
+        return Object.keys(window.store.getColVals("completed"))
+    }
+
     // Assuming filterQuery is a list of {filterType:queryKey} objects
     let validQuests
     
-    filterOrder = ["eq", "eq-cont", "date-range", "cont", "lst-cont"]
+    filterOrder = ["eq", "date", "cont", "lst-cont"]
     // Evaluate filters in the order specified above
     filterOrder.forEach((filterType) => {
         // Don't evaluate a filter if the key isn't present in the filterQuery
         if (Object.hasOwnProperty.call(filterQuery, filterType)) {
-            validQuests = evalAllFilterTypes(filterQuery[filterType], validQuests)
+            validQuests = evalAllFilterTypes(filterQuery[filterType], validQuests, filterType)
         }
     })
 
-    return validQuests
+    return Object.keys(validQuests)
 }
 
-function equalityFilt(valueCollection, compareValue) {
-    // Filter for testing equality
+function evalCollection(valueCollection, compareValue, validityFunc) {
     for (const rowIx in valueCollection) {
         if (Object.hasOwnProperty.call(valueCollection, rowIx)) {
             const rowVal = valueCollection[rowIx];
-            if (rowVal != compareValue) {
+            // If row value isn't valid according to the passed-in validity function,
+            // remove that row from the valid rows
+            if (!validityFunc(rowVal, compareValue)) {
                 delete valueCollection[rowIx]
+                continue
             }
         }
     }
@@ -142,26 +154,48 @@ function equalityFilt(valueCollection, compareValue) {
     return valueCollection
 }
 
-function containsFilt() {
+function equalityFilt(value, compareValue) {
+    if (value == compareValue) {
+        return true
+    }
+    return false
+}
+
+function containsFilt(value, containedValue) {
     // Filter for testing if key contains certain strings
-    // TODO
-    return
+    if (value.includes(containedValue)) {
+        return true
+    }
+    return false
 }
 
-function eqOrContFilt() {
-    // Filter for testing equality or if key contains certain strings
-    // TODO
-    return
-}
-
-function lstContFilt() {
+function lstContFilt(valueCollection, compareValue) {
     // Filter for if a list contains a certain string
-    // TODO
-    return
+    valueCollection = valueCollection.split(';')
+
+    valueCollection.forEach(value => {
+        if (containsFilt(value, compareValue)) {
+            return true
+        }
+    });
+
+    return false
 }
 
-function dateRangeFilt() {
+function dateFilt(value, compareValue, compareOperator) {
     // Filters dates to be within a certain range
     // TODO
-    return
+    const compareFuncs = {
+        "ge":(val1, val2) => {
+            return val1 >= val2
+        },
+        "le":(val1, val2) => {
+            return val1 <= val2
+        }
+    }
+
+    if (compareFuncs[compareOperator](Number(value), Number(compareValue))) {
+        return true
+    }
+    return false
 }

@@ -25,18 +25,19 @@
     <br>
     <div id="dataStatus">No data selected.</div>
     <div id="dataControls">
-        <button class="btn" id="loadAllDataBtn">Load all data from selected file</button>
+        <!-- <button class="btn" id="loadAllDataBtn">Load all data from selected file</button> -->
         <br>
         <br>
-        <form id="filterControls">
+        <div id="filterControls">
             <div>
                 <label for="quest-name-filter">Quest Name:</label>
-                <input class="quest-filter" type="text" id="quest-name-filter" disabled>
+                <input class="quest-filter" type="text" id="quest-name-filter">
             </div>
 
             <div>
                 <label for="importance-level-filter">Importance Level:</label>
                 <select class="quest-filter" name="importance-level-filter" id="importance-level-filter">
+                    <option value=""></option>
                     <option value="side-quest">Side Quest</option>
                     <option value="minor-quest">Minor Quest</option>
                     <option value="major-quest">Major Quest</option>
@@ -44,54 +45,70 @@
             </div>
 
             <div>
-                <label for="questline-name-filter">Questline Name Filter:</label>
-                <input class="quest-filter" type="text" id="questline-name-filter" disabled>
+                <label for="questline-name-filter">Questline Name:</label>
+                <input class="quest-filter" type="text" id="questline-name-filter">
             </div>
 
             <div>
-                <label for="questline-index-filter">Questline Index Filter:</label>
-                <input class="quest-filter" type="number" id="questline-index-filter" disabled>
+                <label for="questline-index-filter">Questline Index:</label>
+                <input class="quest-filter" type="number" id="questline-index-filter">
             </div>
 
             <div>
-                <label for="main-location-filter">Main Location Filter:</label>
-                <input class="quest-filter" type="text" id="main-location-filter" disabled>
+                <label for="main-location-filter">Main Location:</label>
+                <input class="quest-filter" type="text" id="main-location-filter">
             </div>
 
             <div>
-                <label for="relevant-locations-filter">Relevant Locations Filter:</label>
-                <input class="quest-filter" type="text" id="relevant-locations-filter" disabled>
+                <label for="relevant-locations-filter">Relevant Locations:</label>
+                <input class="quest-filter" type="text" id="relevant-locations-filter">
             </div>
 
             <div>
-                <label for="relevant-people-filter">Relevant People Filter:</label>
-                <input class="quest-filter" type="text" id="relevant-people-filter" disabled>
+                <label for="relevant-people-filter">Relevant People:</label>
+                <input class="quest-filter" type="text" id="relevant-people-filter">
             </div>
 
             <div>
-                <label for="relevant-factions-filter">Relevant Factions Filter:</label>
-                <input class="quest-filter" type="text" id="relevant-factions-filter" disabled>
+                <label for="relevant-factions-filter">Relevant Factions:</label>
+                <input class="quest-filter" type="text" id="relevant-factions-filter">
             </div>
 
             <div>
-                <label for="start-date-filter">Start Date Filter:</label>
-                <input class="quest-filter" type="text" id="start-date-filter" disabled>
+                <label for="start-date-filter">Start Date:</label>
+                <input class="quest-filter" type="date" id="start-date-filter">
+                <button name="start-date-filter" class="clearFilterBtn">Clear</button>
             </div>
 
             <div>
-                <label for="level-at-assignment-filter">Level at Assignment Filter:</label>
-                <input class="quest-filter" type="number" id="level-at-assignment-filter" disabled>
+                <label for="end-date-filter">End Date:</label>
+                <input class="quest-filter" type="date" id="end-date-filter">
+                <button name="end-date-filter" class="clearFilterBtn">Clear</button>
             </div>
 
             <div>
-                <label for="completed-filter">Completed Filter:</label>
+                <label for="level-at-assignment-filter">Level at Assignment:</label>
+                <input class="quest-filter" type="number" id="level-at-assignment-filter">
+            </div>
+
+            <div>
+                <label for="completed-filter">Completed:</label>
                 <select class="quest-filter" name="completed-filter" id="completed-filter">
-                    <option value=true>Completed</option>
-                    <option value=false>Uncompleted</option>
+                    <option value=""></option>
+                    <option value="true">Completed</option>
+                    <option value="false">Uncompleted</option>
                 </select>
             </div>
-        </form>
-        <button class="btn" id="filterSubmitBtn">Filter results</button>
+
+            <div>
+                <label for="uid-filter">Quest ID:</label>
+                <input class="quest-filter" type="text" id="uid-filter">
+            </div>
+            
+            <div>
+                <button class="btn" id="filterSubmitBtn">Filter results</button>
+            </div>
+        </div>
     </div>
     <div class="lineBreak"></div>
     <div id="fileData"></div>

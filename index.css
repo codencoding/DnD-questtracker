@@ -40,6 +40,7 @@ body {
 
 #dataControls {
     visibility: hidden;
+    /* visibility: visible; */
 }
 
 .questCard {
@@ -48,7 +49,7 @@ body {
     border-radius: 2px;
 }
 
-form > div > label {
+#filterControls > div > label {
     display: inline-block;
     width: 50%;
     margin-top: 2px;
@@ -68,4 +69,11 @@ form > div > label {
     height: 2px;
     margin-top: 4px;
     margin-bottom: 4px;
+}
+
+#filterSubmitBtn {
+    margin-left: 30%;
+    margin-right: 30%;
+    width: 40%;
+    height: 30px;
 }

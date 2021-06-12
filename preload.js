@@ -15,6 +15,28 @@ const store = new Store()
 //     }
 // })
 
+function transposeJSONData(colData) {
+    let rowData = {}
+    for (const colKey in colData) {
+        if (Object.hasOwnProperty.call(colData, colKey)) {
+            const colVals = colData[colKey];
+            
+            for (const rowIx in colVals) {
+                if (Object.hasOwnProperty.call(colVals, rowIx)) {
+                    const rowVal = colVals[rowIx];
+
+                    // TODO: Find out a cleaner way to do this nested object initialization
+                    if (rowData[rowIx] === undefined) {
+                        rowData[rowIx] = new Object()
+                    }
+                    rowData[rowIx][colKey] = rowVal
+                }
+            }
+        }
+    }
+
+    return rowData
+}
 
 ///////////////////////////////////////
 // Context bridging
@@ -77,14 +99,17 @@ contextBridge.exposeInMainWorld('store', {
                 } catch (error) {
                     console.error(`Error reading file from disk: ${error}`);
                 }
-                store.set(jsonData)
+                store.set({
+                    "colData":jsonData,
+                    "rowData":transposeJSONData(jsonData)
+                })
             }
         })
     },
-    getKeyVals: (key) => {
-        return store.get(key)
+    getRowVals: (rowIx) => {
+        return store.get("rowData." + rowIx)
     },
-    getSize: () => {
-        return store.size
+    getColVals: (col) => {
+        return store.get("colData." + col)
     }
 })

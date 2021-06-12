@@ -2,30 +2,36 @@ const createFileBtn = document.getElementById("createFileBtn")
 const readFileBtn = document.getElementById("readFileBtn")
 const fileDataDiv = document.getElementById("fileData")
 const dataStatus = document.getElementById("dataStatus")
-const loadAllDataBtn = document.getElementById("loadAllDataBtn")
+// const loadAllDataBtn = document.getElementById("loadAllDataBtn")
 const dataControlsDiv = document.getElementById("dataControls")
 const questFilters = document.getElementsByClassName("quest-filter")
 const filterSubmitBtn = document.getElementById("filterSubmitBtn")
+const filterClearBtns = document.getElementsByClassName("clearFilterBtn")
 var rawFileData
 var fileData
-var filterData = {"eq":{},"eq-cont":{},"date-range":{},"cont":{},"lst-cont":{}}
+var filterData = {"eq":{},"date":{},"cont":{},"lst-cont":{}}
 
 const filterTypes = {
     'completed': "eq",
     'full-description': "cont",
     'importance-level': "eq",
     'level-at-assignment': "eq",
-    'main-location': "eq-cont",
-    'quest-name': "eq-cont",
+    'main-location': "cont",
+    'quest-name': "cont",
     'questline-index': "eq",
-    'questline-name': "eq-cont",
+    'questline-name': "cont",
     'relevant-factions': "lst-cont",
     'relevant-locations': "lst-cont",
     'relevant-people': "lst-cont",
-    'start-date': "date-range",
-    'summary': "cont"
+    'start-date': "date",
+    'end-date': "date",
+    'summary': "cont",
+    'uid': "eq"
 }
 
+function clearInput(inputId) {
+    document.getElementById(inputId).value = ""
+}
 
 function getFormData() {
     try {
@@ -35,7 +41,16 @@ function getFormData() {
             let filterType = filterTypes[filterName]
 
             // TODO: When evaluating date-range type filters, convert value to unix timestamp, then to string.
-            filterData[filterType][filterName] = formElem.value
+            if (filterType == "date") {
+                let filterVal = formElem.valueAsNumber
+                if (filterVal) {
+                    filterData[filterType][filterName] = String(filterVal)
+                } else {
+                    filterData[filterType][filterName] = formElem.value
+                }
+            } else {
+                filterData[filterType][filterName] = formElem.value
+            }
         };
         return true;
     } catch (error) {
@@ -89,7 +104,7 @@ function checkQuestValidity(quest) {
     return true
 }
 
-function filterFileData() {
+function updateFilterData() {
     fileData = []
 
     for (const quest of rawFileData) {
@@ -101,20 +116,49 @@ function filterFileData() {
     return fileData
 }
 
-loadAllDataBtn.addEventListener("click", (e) => {
-    updateQuestCards(rawFileData)
-})
+// loadAllDataBtn.addEventListener("click", (e) => {
+//     updateQuestCards(rawFileData)
+// })
 
 filterSubmitBtn.addEventListener("click", (e) => {
     getFormData()
-    fileData = filterFileData()
-    updateQuestCards(fileData)
+    let validRows = executeFilters(filterData)
+    let filteredData = getMany(validRows)
+
+    console.log(filteredData)
+
+
+    // updateFilterData()
+    // updateQuestCards(fileData)
+
 })
 
+for (const key in filterClearBtns) {
+    if (Object.hasOwnProperty.call(filterClearBtns, key)) {
+        const btnElem = filterClearBtns[key];
+        
+        btnElem.addEventListener("click", (e) => {
+            clearInput(btnElem.name)
+        })
+    }
+}
 
 ///////////////////////////////////////
 // Context bridging
 ///////////////////////////////////////
+
+// Store interaction
+//////////////////////
+
+function getMany(indicies) {
+    // Fetches rows at given indicies from the data store
+    let rowsData = []
+    indicies.forEach((rowIx) => {
+        rowsData.push(window.store.getRowVals(rowIx))
+    })
+
+    return rowsData
+}
 
 // Save file button
 /////////////////////
@@ -138,13 +182,15 @@ readFileBtn.addEventListener("click", (e) => {
 
 window.ipc.on("file-selected", (path) => {
 
-    window.fs.readFile(path, "utf8", (fData) => {
-        rawFileData = JSON.parse(fData)
-        fileData = rawFileData
+    window.store.initStore(path)
 
-        dataStatus.innerHTML = `Selected data at: ${path}`
-        dataControlsDiv.style.visibility = "visible"
-    })
+    // window.fs.readFile(path, "utf8", (fData) => {
+    //     rawFileData = JSON.parse(fData)
+    //     fileData = rawFileData
+    // })
+
+    dataStatus.innerHTML = `Selected data at: ${path}`
+    dataControlsDiv.style.visibility = "visible"
 })
 
 // Close window button
