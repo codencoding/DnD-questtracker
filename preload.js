@@ -1,5 +1,8 @@
 const {contextBridge, ipcRenderer} = require('electron')
 const fs = require('fs')
+const Store = require('electron-store')
+
+const store = new Store()
 
 // window.addEventListener('DOMContentLoaded', () => {
 //     const replaceText = (selector, text) => {
@@ -51,7 +54,7 @@ contextBridge.exposeInMainWorld('fs', {
     readFile: (path, encoding, callback) => {
         fs.readFile(path, encoding, (err, data) => {
             if (err) {
-                console.log(`Error reading file from disk: ${err}`);
+                console.error(`Error reading file from disk: ${err}`);
             } else {
                 callback(data)
                 // // parse JSON string to JSON object
@@ -59,5 +62,29 @@ contextBridge.exposeInMainWorld('fs', {
                 // callback(jsonData)
             }
         });
+    }
+})
+
+contextBridge.exposeInMainWorld('store', {
+    initStore: (path) => {
+        fs.readFile(path, (err, data) => {
+            if (err) {
+                console.error(`Error reading file from disk: ${err}`);
+            } else {
+                let jsonData
+                try {
+                    jsonData = JSON.parse(data)
+                } catch (error) {
+                    console.error(`Error reading file from disk: ${error}`);
+                }
+                store.set(jsonData)
+            }
+        })
+    },
+    getKeyVals: (key) => {
+        return store.get(key)
+    },
+    getSize: () => {
+        return store.size
     }
 })

@@ -4,23 +4,38 @@ const fileDataDiv = document.getElementById("fileData")
 const dataStatus = document.getElementById("dataStatus")
 const loadAllDataBtn = document.getElementById("loadAllDataBtn")
 const dataControlsDiv = document.getElementById("dataControls")
-const filterControls = document.getElementById("filterControls")
+const questFilters = document.getElementsByClassName("quest-filter")
 const filterSubmitBtn = document.getElementById("filterSubmitBtn")
 var rawFileData
 var fileData
-var filterData = {}
+var filterData = {"eq":{},"eq-cont":{},"date-range":{},"cont":{},"lst-cont":{}}
+
+const filterTypes = {
+    'completed': "eq",
+    'full-description': "cont",
+    'importance-level': "eq",
+    'level-at-assignment': "eq",
+    'main-location': "eq-cont",
+    'quest-name': "eq-cont",
+    'questline-index': "eq",
+    'questline-name': "eq-cont",
+    'relevant-factions': "lst-cont",
+    'relevant-locations': "lst-cont",
+    'relevant-people': "lst-cont",
+    'start-date': "date-range",
+    'summary': "cont"
+}
 
 
 function getFormData() {
-    let formElems = filterControls.children
-
     try {
-        for (const formElem of formElems) {
-            let formInput = formElem.children[1]
-            filterData[formInput.id] = {
-                inputType:formInput.tagName,
-                value:formInput.value
-            }
+        for (const formElem of questFilters) {
+            // let formInput = formElem.children[1]
+            let filterName = formElem.id.slice(0, formElem.id.length-7)
+            let filterType = filterTypes[filterName]
+
+            // TODO: When evaluating date-range type filters, convert value to unix timestamp, then to string.
+            filterData[filterType][filterName] = formElem.value
         };
         return true;
     } catch (error) {
@@ -57,10 +72,9 @@ function updateQuestCards(jsonData) {
 }
 
 function checkQuestValidity(quest) {
-    for (const key in filterData) {
-        if (Object.hasOwnProperty.call(filterData, key)) {
-            let filtVal = filterData[key];
-            let questKey = key.slice(0, key.length-7)
+    for (const questKey in filterData) {
+        if (Object.hasOwnProperty.call(filterData, questKey)) {
+            let filtVal = filterData[questKey];
             
             if (filtVal["inputType"] == "SELECT") {
                 if (quest[questKey] != filtVal["value"]) {

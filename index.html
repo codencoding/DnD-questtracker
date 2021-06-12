@@ -31,12 +31,12 @@
         <form id="filterControls">
             <div>
                 <label for="quest-name-filter">Quest Name:</label>
-                <input type="text" id="quest-name-filter" disabled>
+                <input class="quest-filter" type="text" id="quest-name-filter" disabled>
             </div>
 
             <div>
                 <label for="importance-level-filter">Importance Level:</label>
-                <select name="importance-level-filter" id="importance-level-filter">
+                <select class="quest-filter" name="importance-level-filter" id="importance-level-filter">
                     <option value="side-quest">Side Quest</option>
                     <option value="minor-quest">Minor Quest</option>
                     <option value="major-quest">Major Quest</option>
@@ -45,47 +45,47 @@
 
             <div>
                 <label for="questline-name-filter">Questline Name Filter:</label>
-                <input type="text" id="questline-name-filter" disabled>
+                <input class="quest-filter" type="text" id="questline-name-filter" disabled>
             </div>
 
             <div>
                 <label for="questline-index-filter">Questline Index Filter:</label>
-                <input type="number" id="questline-index-filter" disabled>
+                <input class="quest-filter" type="number" id="questline-index-filter" disabled>
             </div>
 
             <div>
                 <label for="main-location-filter">Main Location Filter:</label>
-                <input type="text" id="main-location-filter" disabled>
+                <input class="quest-filter" type="text" id="main-location-filter" disabled>
             </div>
 
             <div>
                 <label for="relevant-locations-filter">Relevant Locations Filter:</label>
-                <input type="text" id="relevant-locations-filter" disabled>
+                <input class="quest-filter" type="text" id="relevant-locations-filter" disabled>
             </div>
 
             <div>
                 <label for="relevant-people-filter">Relevant People Filter:</label>
-                <input type="text" id="relevant-people-filter" disabled>
+                <input class="quest-filter" type="text" id="relevant-people-filter" disabled>
             </div>
 
             <div>
                 <label for="relevant-factions-filter">Relevant Factions Filter:</label>
-                <input type="text" id="relevant-factions-filter" disabled>
+                <input class="quest-filter" type="text" id="relevant-factions-filter" disabled>
             </div>
 
             <div>
                 <label for="start-date-filter">Start Date Filter:</label>
-                <input type="text" id="start-date-filter" disabled>
+                <input class="quest-filter" type="text" id="start-date-filter" disabled>
             </div>
 
             <div>
                 <label for="level-at-assignment-filter">Level at Assignment Filter:</label>
-                <input type="number" id="level-at-assignment-filter" disabled>
+                <input class="quest-filter" type="number" id="level-at-assignment-filter" disabled>
             </div>
 
             <div>
                 <label for="completed-filter">Completed Filter:</label>
-                <select name="completed-filter" id="completed-filter">
+                <select class="quest-filter" name="completed-filter" id="completed-filter">
                     <option value=true>Completed</option>
                     <option value=false>Uncompleted</option>
                 </select>
@@ -97,5 +97,6 @@
     <div id="fileData"></div>
 
     <script src="index.js"></script>
+    <script src="filtering.js"></script>
 </body>
 </html>

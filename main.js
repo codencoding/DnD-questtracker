@@ -45,8 +45,10 @@ function createWindow() {
         icon: "icon.ico"
     }
 
+    // Create new window based on windowOptions parameters
     win = new BrowserWindow(windowOptions)
 
+    // Load app
     win.loadFile('index.html')
 }
 
@@ -78,9 +80,7 @@ ipcMain.on('save-dialog', (event) => {
     //     { name: 'Images', extensions: ['jpg', 'png', 'gif'] }
     //   ]
     }
-// console.log("Beginning promise")
     dialog.showSaveDialog(options).then((filename) => {
-// console.log("Promise resolved")
         /*
         The following will send back `filename` once
         the save dialog promise has completed. It'll send
@@ -96,7 +96,6 @@ ipcMain.on('save-dialog', (event) => {
             event.sender.send('saved-file', filename.filePath)
         }
     })
-// console.log("Promise made")
 })
 
 ipcMain.on('close-window', (event) => {
