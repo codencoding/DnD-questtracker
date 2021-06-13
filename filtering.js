@@ -105,7 +105,7 @@ function evalAllFilterTypes(queryKeys, validQuests, filterType) {
                 validQuests = evalCollection(validQuests, queryVal, filterFuncs["date"][queryKey])
             } else {
                 // Filter values based on corresponding filter function and desired filter value
-                validQuests = evalCollection(validQuests, queryVal, filterFuncs[queryKey])
+                validQuests = evalCollection(validQuests, queryVal, filterFuncs[filterType])
             }
 
         }
